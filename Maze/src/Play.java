@@ -21,9 +21,8 @@ public class Play implements GameState
 	}
 	public void draw(Graphics2D g2) 
 	{
-		g2.drawString("Play Mode", WIDTH/2, 50);
+		maze.draw(g2, 50, 50, WIDTH-100, HEIGHT-100);
 	}
-
 	public void update() 
 	{
 		

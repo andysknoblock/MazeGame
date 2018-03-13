@@ -1,10 +1,11 @@
-import java.awt.Color;
 import java.awt.Graphics2D;
 
 public class Menu implements GameState
 {
 	private Button[] buttons = new Button[4];
 	private int gameState;
+	private CenteredText text;
+	private PulsingColor col = new PulsingColor(100,255,100, 200);
 	Menu(int gameState)
 	{
 		this.gameState=gameState;
@@ -12,18 +13,21 @@ public class Menu implements GameState
 		buttons[1] = new Button("LEVEL SELECTOR", WIDTH/2, 150, 30);
 		buttons[2] = new Button("SETTINGS", WIDTH/2, 190, 30);
 		buttons[3] = new Button("LEVEL EDITOR", WIDTH/2, 230, 30);
+		text = new CenteredText("DANK MAZE", WIDTH/2, 10, 70);
 	}
 	public void draw(Graphics2D g2) 
 	{
-		g2.setColor(new Color(50, 200, 200, 150));
+		g2.setColor(col.getColor());
 		for (Button button: buttons)
 		{
 			button.draw(g2);
 		}
+		text.draw(g2);
 		
 	}
 	public void update() 
 	{
+		col.update();
 		for (int i=0; i < buttons.length; i++)
 		{
 			buttons[i].update();

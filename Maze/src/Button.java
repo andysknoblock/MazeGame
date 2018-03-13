@@ -9,6 +9,12 @@ public class Button extends MouseOverObject
 	private Font font;
 	private int texth, fill=0;
 	private boolean configured=false;
+	Button(String str, int x, int y, int w, int h) 
+	{
+		super(x, y, w, h);
+		texth = h-2;
+		this.str=str;
+	}
 	Button(String str, int x, int y, int h) 
 	{
 		super(0, 0, 0, 0);
@@ -23,7 +29,8 @@ public class Button extends MouseOverObject
 		font = new Font("Purisa", Font.BOLD, texth);
 		g2.setFont(font);
 		FontMetrics fm = g2.getFontMetrics();
-		w = fm.stringWidth(str)+3;
+		if (w==0)
+			w = fm.stringWidth(str)+3;
 		x = x-w/2;
 		configured=true;
 	}
@@ -34,11 +41,11 @@ public class Button extends MouseOverObject
 			load(g2);
 		}
 		g2.setFont(font);
-		g2.drawRoundRect(x, y, w, h, h/3, h/3);
+		g2.drawRoundRect(x-fill/40, y-fill/40, w+fill/20, h+fill/20, h/3, h/3);
 		g2.drawString(str, x+2, y+texth-h/10);
 		Color c = g2.getColor();
 		g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), fill));
-		g2.fillRoundRect(x, y, w, h, h/3, h/3);
+		g2.fillRoundRect(x-fill/40, y-fill/40, w+fill/20, h+fill/20, h/3, h/3);
 		g2.setColor(c);
 		
 	}

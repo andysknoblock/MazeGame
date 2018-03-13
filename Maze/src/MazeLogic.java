@@ -19,7 +19,7 @@ public class MazeLogic extends JComponent
 	settings: 2
 	editor: 3
 	*/
-	private final int MENU=0, PLAY=1, LEVELSELECT=2, SETTINGS=3, LEVELEDITOR=4, WIDTH, HEIGHT, FPS=45;
+	private final int MENU=0, PLAY=1, LEVELSELECT=2, SETTINGS=3, LEVELEDITOR=4, WIDTH, HEIGHT, FPS=60;
 	private int gameState=0, level=1;
 	private Timer FPStimer;
 	GameState[] gameStates = new GameState[5];
