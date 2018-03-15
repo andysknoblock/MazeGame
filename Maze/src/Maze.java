@@ -1,18 +1,28 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Maze 
 {
-	private int row, col, rows, cols;
-	private String[][] data; 
+	private int row, col, rows, cols, baseX, baseY, width, height, xDist, yDist;
+	//private String[][] data; 
 	private String path;
-	Maze(String path)
+	private boolean configured = false;
+	private Set<Block> blocks = new HashSet<>();
+	Maze(String path, int baseX, int baseY, int width, int height)
 	{
 		this.path=path;
+		this.baseX=baseX;
+		this.baseY=baseY;
+		this.width=width;
+		this.height=height;
+		
 	}
 	public boolean loadMaze()
 	{
@@ -23,7 +33,7 @@ public class Maze
 			ArrayList<String> dat = new ArrayList<String>();
 			int count=0;
 			String temp = null;
-			while(input.hasNext())
+			while(input.hasNextLine())
 			{
 				temp = input.nextLine();
 				dat.add(temp);
@@ -32,12 +42,16 @@ public class Maze
 			if (temp.contains(","))
 			{
 				String temporary[] = temp.split(",");
-				data = new String[count][temporary.length];
+				rows= count;
+				cols = temporary.length;
 			}
 			else
 			{
-				data = new String[1][count];
+				rows=count;
+				cols=1;
 			}
+			xDist = width/cols;
+			yDist = height/rows;
 			for (int a=0;a<dat.size();a++)
 			{
 				temp = dat.get(a);
@@ -53,17 +67,16 @@ public class Maze
 				}
 				for (int b=0; b< tempo.length; b++)
 				{
-					data[a][b] = tempo[b];
 					if (tempo[b].equals("s"))
 					{
 						row = a;
 						col = b;
 					}
+					Block blockBoi = new Block(tempo[b].charAt(0), b*xDist+baseX, a*yDist+baseY, xDist, yDist);
+					blocks.add(blockBoi);
 				}
 			}
 			input.close();
-			rows = data.length;
-			cols = data[0].length;
 			return true;
 		} 
 		catch (FileNotFoundException e) 
@@ -72,54 +85,27 @@ public class Maze
 			return false;
 		}
 	}
-	public void draw(Graphics2D g2, int baseX, int baseY, int width, int height)
+	public void draw(Graphics2D g2)
 	{
-		int xDist = width/cols;
-		int yDist = height/rows;
-		for (int a=0; a<rows; a++)
+		if (!configured)
 		{
-			for (int b=0; b<cols; b++)
-			{
-				if (a-1>=0)
-				{
-					if (data[a][b].equals("1") && data[a-1][b].equals("1"))
-					{
-						g2.drawLine(b*xDist+baseX, (a-1)*yDist+baseY, b*xDist+baseX, a*yDist+baseY);
-					}
-				}
-				if (b-1>=0)
-				{
-					if (data[a][b].equals("1") && data[a][b-1].equals("1"))
-					{
-						g2.drawLine((b-1)*xDist+baseX, a*yDist+baseY, b*xDist+baseX, a*yDist+baseY);
-					}
-				}
-				if (data[a][b].equals("1") && a==0)
-				{
-					g2.drawLine(b*xDist+baseX, a*yDist+baseY, b*xDist+baseX, (a-1)*yDist+baseY);
-				}
-				if (data[a][b].equals("1") && b==0)
-				{
-					g2.drawLine(b*xDist+baseX, a*yDist+baseY, (b+1)*xDist+baseX, a*yDist+baseY);
-				}
-			}
+			g2.setColor(Color.RED);
+			g2.drawString("loading maze", width/2, 20);
+			configured=true;
+		}
+		g2.drawLine(baseX, baseY, baseX+width, baseY);
+		g2.drawLine(baseX, baseY+height, baseX+width, baseY+height);
+		g2.drawLine(baseX, baseY+height, baseX+width, baseY+height);
+		g2.drawLine(baseX, baseY+height, baseX, baseY);
+		g2.drawLine(baseX+width, baseY+height, baseX+width, baseY);
+		for (Block block: blocks)
+		{
+			block.draw(g2);
 		}
 	}
 	public Point getCurrentCoords()
 	{
 		return new Point(row, col);
 	}
-	public void printArray()
-	{
-		for (String[] s : data)
-		{
-			for (String temp: s)
-			{
-				System.out.print(temp);
-			}
-			System.out.println("");
-		}
-	}
-	
 
 }

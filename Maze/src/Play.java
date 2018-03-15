@@ -4,6 +4,7 @@ public class Play implements GameState
 {
 	private int gameState;
 	private Maze maze;
+	private PulsingColor col = new PulsingColor(100,255,100, 200);
 	Play (int gameState, int level)
 	{
 		this.gameState=gameState;
@@ -15,17 +16,18 @@ public class Play implements GameState
 		if (level<=30)
 		{
 			String path = "src/level" + level + ".maz";
-			maze = new Maze(path);
+			maze = new Maze(path,50, 50, WIDTH-100, HEIGHT-100);
 			maze.loadMaze();
 		}
 	}
 	public void draw(Graphics2D g2) 
 	{
-		maze.draw(g2, 50, 50, WIDTH-100, HEIGHT-100);
+		g2.setColor(col.getColor());
+		maze.draw(g2);
 	}
 	public void update() 
 	{
-		
+		col.update();
 	}
 
 	public void notifyMouseReleased()
