@@ -1,4 +1,5 @@
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 
 public class Menu implements GameState
 {
@@ -48,5 +49,8 @@ public class Menu implements GameState
 	{
 		
 		return gameState;
+	}
+	public void notifyKeyReleased(KeyEvent e) {
+		
 	}
 }

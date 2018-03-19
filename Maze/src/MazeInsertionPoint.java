@@ -1,6 +1,8 @@
 
 
 import java.awt.Point;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -34,7 +36,23 @@ public class MazeInsertionPoint {
 			public void mouseExited(MouseEvent e) {
 			}
 		}
-		game.addMouseListener(new MouseInfo());
+		class KeyInfo implements KeyListener
+		{
+
+			public void keyTyped(KeyEvent e) {
+				
+			}
+
+			public void keyPressed(KeyEvent e) {
+			}
+
+			public void keyReleased(KeyEvent e) {
+				game.notifyKeyReleased(e);
+			}
+			
+		}
+		frame.addMouseListener(new MouseInfo());
+		frame.addKeyListener(new KeyInfo());
 		frame.add(game);
 		frame.setVisible(true);
 	}

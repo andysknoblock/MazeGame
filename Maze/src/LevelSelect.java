@@ -1,4 +1,5 @@
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 
 public class LevelSelect implements GameState
 {
@@ -25,6 +26,11 @@ public class LevelSelect implements GameState
 	public int getGameState() 
 	{
 		return gameState;
+	}
+	@Override
+	public void notifyKeyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

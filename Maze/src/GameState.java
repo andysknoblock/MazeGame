@@ -1,4 +1,5 @@
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 
 public interface GameState 
 {
@@ -7,5 +8,6 @@ public interface GameState
 	public void update();
 	public void notifyMouseReleased();
 	public int getGameState();
+	public void notifyKeyReleased(KeyEvent e);
 
 }

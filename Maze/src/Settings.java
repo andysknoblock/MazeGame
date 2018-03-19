@@ -1,4 +1,5 @@
 import java.awt.Graphics2D;
+import java.awt.event.KeyEvent;
 
 public class Settings implements GameState
 {
@@ -25,6 +26,10 @@ public class Settings implements GameState
 	public int getGameState() 
 	{
 		return gameState;
+	}
+	public void notifyKeyReleased(KeyEvent e) 
+	{
+		
 	}
 
 }

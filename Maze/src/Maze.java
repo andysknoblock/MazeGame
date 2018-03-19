@@ -10,11 +10,13 @@ import java.util.Set;
 
 public class Maze 
 {
-	private int row, col, rows, cols, baseX, baseY, width, height, xDist, yDist;
+	private int row, col, rows, cols, baseX, baseY, width, height;
+	float xDist, yDist;
 	//private String[][] data; 
 	private String path;
 	private boolean configured = false;
 	private Set<Block> blocks = new HashSet<>();
+	private SpecialBlock[] specials = new SpecialBlock[2];
 	Maze(String path, int baseX, int baseY, int width, int height)
 	{
 		this.path=path;
@@ -54,6 +56,7 @@ public class Maze
 			yDist = height/rows;
 			for (int a=0;a<dat.size();a++)
 			{
+				temp = temp.toLowerCase();
 				temp = dat.get(a);
 				String[] tempo;
 				if (temp.contains(","))
@@ -69,16 +72,26 @@ public class Maze
 				{
 					if (tempo[b].equals("s"))
 					{
-						row = a;
-						col = b;
+						col = a;
+						row = b;
+						SpecialBlock blockBoi = new SpecialBlock(tempo[b].charAt(0), b, a, (int) (b*xDist+baseX), (int)(a*yDist+baseY),(int) xDist, (int)yDist, rows, cols);
+						specials[0] = blockBoi;
 					}
-					Block blockBoi = new Block(tempo[b].charAt(0), b*xDist+baseX, a*yDist+baseY, xDist, yDist);
-					blocks.add(blockBoi);
+					else if (tempo[b].equals("e"))
+					{
+						SpecialBlock blockBoi = new SpecialBlock(tempo[b].charAt(0), b, a, (int)(b*xDist+baseX),(int) (a*yDist+baseY), (int)xDist,(int) yDist, rows, cols);
+						specials[1] = blockBoi;
+					}
+					else if (tempo[b]!="1")
+					{
+						Block blockBoi = new Block(tempo[b].charAt(0), b, a, (int)(b*xDist+baseX), (int)(a*yDist+baseY),(int) xDist, (int)yDist);
+						blocks.add(blockBoi);
+					}
 				}
 			}
 			input.close();
 			return true;
-		} 
+		}
 		catch (FileNotFoundException e) 
 		{
 			System.out.println(e);
@@ -93,19 +106,134 @@ public class Maze
 			g2.drawString("loading maze", width/2, 20);
 			configured=true;
 		}
-		g2.drawLine(baseX, baseY, baseX+width, baseY);
-		g2.drawLine(baseX, baseY+height, baseX+width, baseY+height);
-		g2.drawLine(baseX, baseY+height, baseX+width, baseY+height);
-		g2.drawLine(baseX, baseY+height, baseX, baseY);
-		g2.drawLine(baseX+width, baseY+height, baseX+width, baseY);
 		for (Block block: blocks)
 		{
 			block.draw(g2);
 		}
+		for (SpecialBlock block: specials)
+		{
+			block.draw(g2);
+		}
 	}
-	public Point getCurrentCoords()
+	
+	public Point getStartCoords()
 	{
 		return new Point(row, col);
 	}
+	public Point getDimensions()
+	{
+		return new Point(rows, cols);
+	}
+	public boolean canMoveRight(Point p)
+	{
+		boolean temp=true;
+		for (Block b: blocks)
+		{
+			if (b.getCoords().equals(p))
+			{
+				if (b.getRight())
+				{
+					temp=false;
+				}
+			}
+			
+			if (temp && b.getCoords().equals(new Point(p.x+1, p.y)))
+			{
+				if (b.getLeft())
+				{
+					temp=false;
+				}
+			}
+		}
+		return temp;
+	}
+	public boolean canMoveLeft(Point p)
+	{
+		boolean temp=true;
+		for (Block b: blocks)
+		{
+			if (b.getCoords().equals(p))
+			{
+				if (b.getLeft())
+				{
+					temp=false;
+				}
+			}
+			if (temp && b.getCoords().equals(new Point(p.x-1, p.y)))
+			{
+				if (b.getRight())
+					temp=false;
+			}
+		}
+		return temp;
+	}
+	public boolean canMoveDown(Point p)
+	{
+		boolean temp=true;
+		for (Block b: blocks)
+		{
+			if (b.getCoords().equals(p))
+			{
+				if (b.getBottom())
+				{
+					temp=false;
+				}
+			}
+			if (temp && b.getCoords().equals(new Point(p.x, p.y+1)))
+			{
+				if (b.getTop())
+					temp=false;
+			}
+		}
+		return temp;
+	}
+	public boolean canMoveUp(Point p)
+	{
+		boolean temp=true;
+		for (Block b: blocks)
+		{
+			if (b.getCoords().equals(p))
+			{
+				if (b.getTop())
+				{
+					temp=false;
+				}
+			}
+			if (temp && b.getCoords().equals(new Point(p.x, p.y-1)))
+			{
+				if (b.getBottom())
+					temp=false;
+			}
+		}
+		return temp;
+	}
+	/*public Set<Block> getNearby(int rowVal, int colVal)
+	{
+		Set <Block> blocklads = new HashSet<>();
+		for (Block b:blocks)
+		{
+			if (isNextTo(b.getCoords(), new Point(rowVal, colVal)))
+			{
+				blocklads.add(b);
+			}
+		}
+		return blocklads;
+	}
+	private boolean isNextTo(Point p1, Point p2)
+	{
+		if (p1.x==p2.x && isWithinOneOf(p1.y,p2.y))
+			return true;
+		else if (p1.y==p2.y && isWithinOneOf(p1.x,p2.x))
+			return true;
+		else
+			return false;
+	}
+	private boolean isWithinOneOf(int n1, int n2)
+	{
+		if (Math.abs(n1-n2)<=1)
+			return true;
+		else
+			return false;
+	}*/
 
 }

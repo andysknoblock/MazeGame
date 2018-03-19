@@ -40,8 +40,16 @@ public class CenteredText extends MouseOverObject
 			load(g2);
 		}
 		g2.setFont(font);
-		g2.drawString(str, x+2, y+texth-h/10);
+		g2.drawString(str, x, y+texth-h/10);
 		
+	}
+	public int getMinX()
+	{
+		return x;
+	}
+	public int getMaxX()
+	{
+		return x+w;
 	}
 	
 

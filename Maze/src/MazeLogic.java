@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JComponent;
 import javax.swing.Timer;
@@ -62,6 +63,10 @@ public class MazeLogic extends JComponent
 	public void notifyMouseReleased()
 	{
 		gameStates[gameState].notifyMouseReleased();
+	}
+	public void notifyKeyReleased(KeyEvent c)
+	{
+		gameStates[gameState].notifyKeyReleased(c);
 	}
 	
 	
