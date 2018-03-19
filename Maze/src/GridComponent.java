@@ -9,5 +9,7 @@ public interface GridComponent
 	public void rotateLeft();
 	public boolean notifyMouseReleased();
 	public boolean isSelected();
+	public void updateLocation(int rows, int cols, int w, int h);
+	public void updateState(int state);
 
 }

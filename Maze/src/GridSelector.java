@@ -14,7 +14,7 @@ public class GridSelector
 		this.y=y;
 		this.w=w;
 		this.h=h;
-		parts[0] = new GridLine(x, y, SIZE, SIZE);
+		parts[0] = new GridLine(0, x, y, SIZE, SIZE);
 	}
 	public void draw(Graphics2D g2)
 	{
@@ -45,15 +45,15 @@ public class GridSelector
 		}
 		g2.setColor(temporary);
 	}
+	public GridComponent getSelected()
+	{
+		return selected;
+	}
 	public void update()
 	{
 	}
 	public void notifyMouseReleased()
 	{
-		if (selected!=null)
-		{
-			
-		}
 		for (int i=0; i<parts.length; i++)
 		{
 			if(parts[i].notifyMouseReleased())

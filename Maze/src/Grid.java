@@ -2,12 +2,15 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Grid extends MouseOverObject
 {
 	private int rows, cols;
 	private float xStep, yStep;
 	private Color greyish = new Color(200,200,200,100);
+	Set<GridComponent> gridData = new HashSet<>();
 	Grid(int x, int y, int width, int height, int rows, int cols)
 	{
 		super(x,y,width,height);
@@ -25,6 +28,10 @@ public class Grid extends MouseOverObject
 		g2.drawLine(x, y+h, x+w, y+h);
 		g2.drawLine(x, y, x, y+h);
 		g2.drawLine(x+w, y, x+w, y+h);
+		for (GridComponent grd: gridData)
+		{
+			grd.draw(g2);
+		}
 		g2.setColor(greyish);
 		for (int i=0; i<rows; i++)
 		{
@@ -35,6 +42,7 @@ public class Grid extends MouseOverObject
 			g2.drawLine(toX(i), y, toX(i), y+h);
 		}
 		g2.setColor(col);
+		
 	}
 	public Point mouseOver()
 	{
@@ -48,7 +56,6 @@ public class Grid extends MouseOverObject
 			tempX=tempX/xStep;
 			tempY=tempY/yStep;
 			p = new Point((int) tempX, (int) tempY);
-			System.out.println(p);
 			return p;
 		}
 		else
@@ -63,15 +70,22 @@ public class Grid extends MouseOverObject
 		xStep = (float)(w)/cols;
 		yStep = (float)(h)/rows;
 	}
-	private int toX(int colX)
+	public int toX(int colX)
 	{
 		float ans = x+xStep*colX;
 		return (int)ans;
 	}
-	private int toY(int colY)
+	public int toY(int colY)
 	{
 		float ans = y+yStep*colY;
 		return (int)ans;
+	}
+	public void addGridComponent(GridComponent grdComp, int row, int column)
+	{
+		GridComponent temp = grdComp;
+		temp.updateLocation(toX(rows), toY(column), (int) xStep, (int) yStep);
+		System.out.println(toX(rows));
+		gridData.add(temp);
 	}
 	
 
