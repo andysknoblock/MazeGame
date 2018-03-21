@@ -12,11 +12,10 @@ public class Maze
 {
 	private int row, col, rows, cols, baseX, baseY, width, height;
 	float xDist, yDist;
-	//private String[][] data; 
 	private String path;
 	private boolean configured = false;
 	private Set<Block> blocks = new HashSet<>();
-	private SpecialBlock[] specials = new SpecialBlock[2];
+	//private SpecialBlock[] specials = new SpecialBlock[2];
 	Maze(String path, int baseX, int baseY, int width, int height)
 	{
 		this.path=path;
@@ -56,6 +55,7 @@ public class Maze
 			yDist = height/rows;
 			for (int a=0;a<dat.size();a++)
 			{
+				
 				temp = temp.toLowerCase();
 				temp = dat.get(a);
 				String[] tempo;
@@ -70,19 +70,7 @@ public class Maze
 				}
 				for (int b=0; b< tempo.length; b++)
 				{
-					if (tempo[b].equals("s"))
-					{
-						col = a;
-						row = b;
-						SpecialBlock blockBoi = new SpecialBlock(tempo[b].charAt(0), b, a, (int) (b*xDist+baseX), (int)(a*yDist+baseY),(int) xDist, (int)yDist, rows, cols);
-						specials[0] = blockBoi;
-					}
-					else if (tempo[b].equals("e"))
-					{
-						SpecialBlock blockBoi = new SpecialBlock(tempo[b].charAt(0), b, a, (int)(b*xDist+baseX),(int) (a*yDist+baseY), (int)xDist,(int) yDist, rows, cols);
-						specials[1] = blockBoi;
-					}
-					else if (tempo[b]!="1")
+					if (tempo[b]!="1")
 					{
 						Block blockBoi = new Block(tempo[b].charAt(0), b, a, (int)(b*xDist+baseX), (int)(a*yDist+baseY),(int) xDist, (int)yDist);
 						blocks.add(blockBoi);
@@ -107,10 +95,6 @@ public class Maze
 			configured=true;
 		}
 		for (Block block: blocks)
-		{
-			block.draw(g2);
-		}
-		for (SpecialBlock block: specials)
 		{
 			block.draw(g2);
 		}

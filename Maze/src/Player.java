@@ -12,9 +12,10 @@ public class Player
 		this.baseY=baseY;
 		xDist = width/cols;
 		yDist = height/rows;
-		this.rows=rows;
 		this.cols=cols;
+		this.rows=rows;
 		update();
+		
 	}
 	public void draw(Graphics2D g2)
 	{
@@ -24,36 +25,36 @@ public class Player
 	
 	public void update()
 	{
-		x = baseX+row*xDist;
-		y = baseY+col*yDist;
+		x = baseX+col*xDist;
+		y = baseY+row*yDist;
 	}
 	public void moveUp()
-	{
-		if (col>0)
-			col-=1;
-		update();
-	}
-	public void moveDown()
-	{
-		if (col<cols-1)
-			col+=1;
-		update();
-	}
-	public void moveLeft()
 	{
 		if (row>0)
 			row-=1;
 		update();
 	}
-	public void moveRight()
+	public void moveDown()
 	{
 		if (row<rows-1)
 			row+=1;
 		update();
 	}
+	public void moveLeft()
+	{
+		if (col>0)
+			col-=1;
+		update();
+	}
+	public void moveRight()
+	{
+		if (col<cols-1)
+			col+=1;
+		update();
+	}
 	public Point getCoords()
 	{
-		return new Point(row, col);
+		return new Point(col, row);
 	}
 
 }

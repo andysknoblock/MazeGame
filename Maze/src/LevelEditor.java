@@ -11,7 +11,10 @@ public class LevelEditor implements GameState
 	private GridSelector selector = new GridSelector(0, HEIGHT-70, WIDTH, 40);
 	private GridComponent selected = null;
 	private Grid grid = new Grid(50, 50, WIDTH-150, HEIGHT-150, rows, cols);
-	private Button save = new Button("Save", WIDTH-30, 30, 15);
+	private Button save = new Button("Save", WIDTH-35, 30, 15);
+	private Button edit = new Button("Edit", WIDTH-35, 60, 15);
+	private Button delete = new Button("Delete", WIDTH-35, 80, 15);
+	private PressTriangle mode = new PressTriangle(false, WIDTH-75, 64, 8);
 	LevelEditor (int gameState)
 	{
 		this.gameState=gameState;
@@ -28,6 +31,9 @@ public class LevelEditor implements GameState
 		grid.draw(g2);
 		selector.draw(g2);
 		save.draw(g2);
+		edit.draw(g2);
+		delete.draw(g2);
+		mode.draw(g2);
 	}
 
 	public void update() 
@@ -38,6 +44,8 @@ public class LevelEditor implements GameState
 		grid.updateRowsCols(rows, cols);
 		selector.update();
 		selected=selector.getSelected();
+		edit.update();
+		delete.update();
 	}
 
 	public void notifyMouseReleased()
@@ -47,11 +55,29 @@ public class LevelEditor implements GameState
 			nums[i].notifyMouseReleased();
 		}
 		selector.notifyMouseReleased();
-		if (grid.isOver() && selected!=null)
+		if (grid.isOver() && selected!=null && !grid.getDelete())
 		{
 			Point temp = grid.mouseOver();
-			System.out.println(temp);
 			grid.addGridComponent(selected, temp.x, temp.y);
+		}
+		if (grid.getDelete() && grid.isOver())
+		{
+			Point temp = grid.mouseOver();
+			grid.deleteCoordinate(temp.x, temp.y);
+		}
+		if (save.isReleased())
+		{
+			grid.save();
+		}
+		if (edit.isReleased())
+		{
+			mode.updateY(edit.y+4);
+			grid.setDelete(false);
+		}
+		if (delete.isReleased())
+		{
+			mode.updateY(delete.y+4);
+			grid.setDelete(true);
 		}
 	}
 

@@ -19,7 +19,7 @@ public class Play implements GameState
 	{
 		if (level<=30)
 		{
-			String path = "src/level" + level + ".maz";
+			String path = "mazes/level" + level + ".maz";
 			maze = new Maze(path,50, 50, WIDTH-100, HEIGHT-100);
 			maze.loadMaze();
 			Point startCoords = maze.getStartCoords();

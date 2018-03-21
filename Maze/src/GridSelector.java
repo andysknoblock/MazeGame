@@ -5,7 +5,7 @@ public class GridSelector
 {
 	private int x, y, w, h;
 	private final int SIZE=40;
-	private GridComponent[] parts = new GridComponent[1];
+	private GridComponent[] parts = new GridComponent[4];
 	private GridComponent selected = null;
 	private Color cool = new Color(150,150,255);
 	GridSelector(int x, int y, int w, int h)
@@ -14,7 +14,14 @@ public class GridSelector
 		this.y=y;
 		this.w=w;
 		this.h=h;
-		parts[0] = new GridLine(0, x, y, SIZE, SIZE);
+		int tempX=x;
+		parts[0] = new LeftAlignedGridLine(tempX, y, SIZE, SIZE);
+		tempX+=SIZE;
+		parts[1] = new TopAlignedGridLine(tempX, y, SIZE, SIZE);
+		tempX+=SIZE;
+		parts[2] = new StartGridComponent(tempX, y, SIZE, SIZE);
+		tempX+=SIZE;
+		parts[3] = new ExitGridComponent(tempX, y, SIZE, SIZE);
 	}
 	public void draw(Graphics2D g2)
 	{
@@ -26,22 +33,15 @@ public class GridSelector
 		for (GridComponent temp: parts)
 		{
 			g2.setColor(cool);
-			if (temp.getState()==0)
+			temp.drawSample(g2);
+			g2.setColor(temporary);
+			g2.drawLine(tempX, y, tempX, y+h);
+			if (temp.isSelected())
 			{
-				temp.drawSample(g2);
-				g2.setColor(temporary);
-				g2.drawLine(tempX, y, tempX, y+h);
-				if (temp.isSelected())
-				{
-					g2.setColor(temporary2);
-					g2.fillRect(tempX-SIZE, y, SIZE, SIZE);
-				}
-				tempX+=SIZE;
+				g2.setColor(temporary2);
+				g2.fillRect(tempX-SIZE, y, SIZE, SIZE);
 			}
-			else
-			{
-				temp.draw(g2);
-			}
+			tempX+=SIZE;
 		}
 		g2.setColor(temporary);
 	}
