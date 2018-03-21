@@ -36,6 +36,10 @@ public class Play implements GameState
 	public void update() 
 	{
 		col.update();
+		if(maze.checkWin(player.getCoords()))
+		{
+			System.out.println("FREAKING WINNING");
+		}
 	}
 
 	public void notifyMouseReleased()

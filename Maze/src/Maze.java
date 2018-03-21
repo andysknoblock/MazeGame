@@ -15,6 +15,7 @@ public class Maze
 	private String path;
 	private boolean configured = false;
 	private Set<Block> blocks = new HashSet<>();
+	private MazeExit exit = new MazeExit();
 	//private SpecialBlock[] specials = new SpecialBlock[2];
 	Maze(String path, int baseX, int baseY, int width, int height)
 	{
@@ -34,11 +35,28 @@ public class Maze
 			ArrayList<String> dat = new ArrayList<String>();
 			int count=0;
 			String temp = null;
+			Point exit1 = null;
 			while(input.hasNextLine())
 			{
 				temp = input.nextLine();
-				dat.add(temp);
-				count++;
+				if (temp.charAt(0)=='S')
+				{
+					String dengue = temp.substring(2, temp.length()-1);
+					String[] dank = dengue.split(",");
+					col = Integer.parseInt(dank[0]);
+					row = Integer.parseInt(dank[1]);
+				}
+				else if (temp.charAt(0)=='E')
+				{
+					String dengue = temp.substring(2, temp.length()-1);
+					String[] dank = dengue.split(",");
+					exit1 = new Point(Integer.parseInt(dank[0]),Integer.parseInt(dank[1]));
+				}
+				else
+				{
+					dat.add(temp);
+					count++;
+				}
 			}
 			if (temp.contains(","))
 			{
@@ -53,10 +71,10 @@ public class Maze
 			}
 			xDist = width/cols;
 			yDist = height/rows;
+			exit.setEnd((int)(exit1.x*xDist+baseX), (int)(exit1.y*yDist+baseY), (int) xDist,(int)yDist , exit1.x, exit1.y);
 			for (int a=0;a<dat.size();a++)
 			{
 				
-				temp = temp.toLowerCase();
 				temp = dat.get(a);
 				String[] tempo;
 				if (temp.contains(","))
@@ -98,6 +116,7 @@ public class Maze
 		{
 			block.draw(g2);
 		}
+		exit.draw(g2);
 	}
 	
 	public Point getStartCoords()
@@ -191,33 +210,14 @@ public class Maze
 		}
 		return temp;
 	}
-	/*public Set<Block> getNearby(int rowVal, int colVal)
+	public boolean checkWin(Point player)
 	{
-		Set <Block> blocklads = new HashSet<>();
-		for (Block b:blocks)
+		if (player.equals(exit.getCoords()))
 		{
-			if (isNextTo(b.getCoords(), new Point(rowVal, colVal)))
-			{
-				blocklads.add(b);
-			}
+			return true;
 		}
-		return blocklads;
-	}
-	private boolean isNextTo(Point p1, Point p2)
-	{
-		if (p1.x==p2.x && isWithinOneOf(p1.y,p2.y))
-			return true;
-		else if (p1.y==p2.y && isWithinOneOf(p1.x,p2.x))
-			return true;
 		else
 			return false;
 	}
-	private boolean isWithinOneOf(int n1, int n2)
-	{
-		if (Math.abs(n1-n2)<=1)
-			return true;
-		else
-			return false;
-	}*/
 
 }

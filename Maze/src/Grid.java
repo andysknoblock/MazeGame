@@ -85,6 +85,7 @@ public class Grid extends MouseOverObject
 	private void doSave()
 	{
 		char[][] toFile = new char[rows][cols];
+		Point start = null, exit = null;
 		for (int i=0; i<rows; i++)
 		{
 			for (int j=0; j<cols; j++)
@@ -102,6 +103,14 @@ public class Grid extends MouseOverObject
 						if (grd.getID()==1)
 						{
 							top=true;
+						}
+						if (grd.getID()==2)
+						{
+							start = new Point(j, i);
+						}
+						if (grd.getID()==3)
+						{
+							exit = new Point(j, i);
 						}
 					}
 				}
@@ -139,6 +148,8 @@ public class Grid extends MouseOverObject
 				}
 				pr.println();
 			}
+			pr.println("S(" + start.x + "," + start.y + ")");
+			pr.println("E(" + exit.x + "," + exit.y + ")");
 			pr.close();
 		} 
 		catch (FileNotFoundException e) 
