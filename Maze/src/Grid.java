@@ -80,7 +80,9 @@ public class Grid extends MouseOverObject
 			message = new FadingMessage("No start/exit",450, 30, 15);
 		}
 		if (save)
+		{
 			message = new FadingMessage("Saving",450, 30, 20);
+		}
 	}
 	private void doSave()
 	{
@@ -98,7 +100,6 @@ public class Grid extends MouseOverObject
 						if (grd.getID()==0)
 						{
 							left=true;
-							System.out.print("Zoinks");
 						}
 						if (grd.getID()==1)
 						{
@@ -135,7 +136,11 @@ public class Grid extends MouseOverObject
 		}
 		try 
 		{
-			PrintWriter pr = new PrintWriter(new File("mazes/level1.maz"));
+			File folder = new File("mazes/CustomMazes/");
+			File fileList[] = folder.listFiles(); 
+			String jeep  = String.format("%06d", fileList.length);
+			String path = "mazes/CustomMazes/" + jeep + ".maz";
+			PrintWriter pr = new PrintWriter(new File(path));
 			for (int i=0; i<toFile.length; i++)
 			{
 				for (int j=0; j<toFile[0].length; j++)

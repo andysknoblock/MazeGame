@@ -24,7 +24,6 @@ public class Maze
 		this.baseY=baseY;
 		this.width=width;
 		this.height=height;
-		
 	}
 	public boolean loadMaze()
 	{
@@ -60,7 +59,7 @@ public class Maze
 			}
 			if (temp.contains(","))
 			{
-				String temporary[] = temp.split(",");
+				String temporary[] = dat.get(0).split(",");
 				rows= count;
 				cols = temporary.length;
 			}

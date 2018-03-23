@@ -5,14 +5,14 @@ import java.awt.Graphics2D;
 
 public class Button extends MouseOverObject
 {
-	private String str;
-	private Font font;
-	private int texth, fill=0;
-	private boolean configured=false;
+	protected String str;
+	protected Font font;
+	protected int texth, fill=0;
+	protected boolean configured=false;
 	Button(String str, int x, int y, int w, int h) 
 	{
 		super(x, y, w, h);
-		texth = h-2;
+		texth = h-5;
 		this.str=str;
 	}
 	Button(String str, int x, int y, int h) 
@@ -41,9 +41,13 @@ public class Button extends MouseOverObject
 			load(g2);
 		}
 		g2.setFont(font);
+		Color c = g2.getColor();
+		g2.setColor(Color.BLACK);
+		g2.fillRoundRect(x-fill/40, y-fill/40, w+fill/20, h+fill/20, h/3, h/3);
+		g2.setColor(c);
 		g2.drawRoundRect(x-fill/40, y-fill/40, w+fill/20, h+fill/20, h/3, h/3);
 		g2.drawString(str, x+2, y+texth-h/10);
-		Color c = g2.getColor();
+		
 		g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), fill));
 		g2.fillRoundRect(x-fill/40, y-fill/40, w+fill/20, h+fill/20, h/3, h/3);
 		g2.setColor(c);
