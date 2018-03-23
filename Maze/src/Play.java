@@ -69,6 +69,7 @@ public class Play implements GameState
 		if (over.isReleased())
 		{
 			gameState=LEVELSELECT;
+			commun=null;
 		}
 		if (backToMenu.isReleased())
 		{

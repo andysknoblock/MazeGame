@@ -15,7 +15,7 @@ public class MouseOverObject
 	{
 		Point temp = MouseInfo.getPointerInfo().getLocation();
 		double mouseX= temp.getX(), mouseY = temp.getY();
-		if (mouseX>=x && mouseX<=x+w && mouseY>=y && mouseY<=y+h)
+		if (mouseX>=x && mouseX<=x+w && mouseY-20>=y && mouseY-25<=y+h)
 			return true;
 		else
 			return false;

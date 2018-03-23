@@ -25,7 +25,7 @@ public class MazeLogic extends JComponent
 	editor: 3
 	*/
 	private final int MENU=0, PLAY=1, LEVELSELECT=2, LEVELLIST=3, LEVELEDITOR=4, WIDTH, HEIGHT, FPS=60;
-	private int gameState=0, maxLevel=1, animation=0, totalLevels=2;
+	private int gameState=0, maxLevel=1, animation=0, totalLevels=4;
 	private String path = "data/levels.dat";
 	private Timer FPStimer;
 	GameState[] gameStates = new GameState[5];
@@ -107,7 +107,7 @@ public class MazeLogic extends JComponent
 		//cursor
 		g2.setColor(Color.WHITE);
 		Point temp = MouseInfo.getPointerInfo().getLocation();
-		g2.drawOval((int)temp.getX(), (int) temp.getY(), 10, 10);
+		g2.drawOval((int)temp.getX(), (int) temp.getY()-25, 10, 10);
 		if (animation>-1)
 		{
 			animation+=5;
@@ -146,47 +146,47 @@ public class MazeLogic extends JComponent
 			animation=0;
 			gameState=gameStates[gameState].getGameState(); 
 			//gameStates[gameState].setGameState(gameState);
-			/*if (commun!=null)
+			if (commun!=null && gameState == PLAY)
 			{
 				if (gameState==commun.getGameState())
 				{
-					if (gameState==PLAY)
-					{
-						if (commun.getCommand()!=-1)
-							(gameStates[gameState]) = new Play(PLAY, commun.getCommand());
-						else
-							(gameStates[gameState]) = new Play(PLAY, maxLevel);
-					}
+					if (commun.getCommand()!=-1)
+						(gameStates[gameState]) = new Play(PLAY, commun.getCommand());
+					else
+						(gameStates[gameState]) = new Play(PLAY, maxLevel);
+
 				}
 			}
 			else
-			{*/
-			if (gameState == MENU)
 			{
-				gameStates[gameState] = new Menu(MENU);
+				if (gameState == MENU)
+				{
+					gameStates[gameState] = new Menu(MENU);
+				}
+				else if (gameState == PLAY)
+				{
+					gameStates[gameState] = new Play(PLAY, maxLevel);
+				}
+				else if (gameState == LEVELSELECT)
+				{
+					gameStates[gameState] = new LevelSelect(LEVELSELECT, maxLevel);
+				}
+				else if (gameState == LEVELLIST)				
+				{
+					gameStates[gameState] = new LevelList(LEVELLIST);
+				}
+				else if (gameState == LEVELEDITOR)
+				{
+					gameStates[gameState] = new LevelEditor(LEVELEDITOR);
+				}
+				else
+				{
+					System.out.println("Wtf bro gamestate is: " + gameState);
+				}
 			}
-			else if (gameState == PLAY)
-			{
-				gameStates[gameState] = new Play(PLAY, maxLevel);
-			}
-			else if (gameState == LEVELSELECT)
-			{
-				gameStates[gameState] = new LevelSelect(LEVELSELECT, maxLevel);
-			}
-			else if (gameState == LEVELLIST)				
-			{
-				gameStates[gameState] = new LevelList(LEVELLIST);
-			}
-			else if (gameState == LEVELEDITOR)
-			{
-				gameStates[gameState] = new LevelEditor(LEVELEDITOR);
-			}
-			else
-			{
-				System.out.println("Wtf bro gamestate is: " + gameState);
-			}
-				
 		}
+
+
 
 	}
 	private void saveData()

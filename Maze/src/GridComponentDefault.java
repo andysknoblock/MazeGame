@@ -27,7 +27,7 @@ public class GridComponentDefault implements GridComponent
 	{
 		int tempX, tempY;
 		tempX = MouseInfo.getPointerInfo().getLocation().x;
-		tempY = MouseInfo.getPointerInfo().getLocation().y;
+		tempY = MouseInfo.getPointerInfo().getLocation().y-25;
 		if (tempX>=x && tempX<=x+w && tempY>=y && tempY<=y+h)
 			return true;
 		else

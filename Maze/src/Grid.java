@@ -169,7 +169,7 @@ public class Grid extends MouseOverObject
 		{
 			Point p = MouseInfo.getPointerInfo().getLocation();
 			double tempX=p.x;
-			double tempY=p.y;
+			double tempY=p.y-25;
 			tempX-=x;
 			tempY-=y;
 			tempX=tempX/xStep;
