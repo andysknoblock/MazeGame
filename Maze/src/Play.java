@@ -11,6 +11,7 @@ public class Play implements GameState
 	private PulsingColor col = new PulsingColor(100,255,100, 200);
 	private Player player = new Player();
 	private BounceText winn = null;
+	private Button menu = new Button("Return To Menu", 100, 15, 25);
 	private FadeButton over = new FadeButton("RETURN TO LEVEL SELECTOR", WIDTH/2, HEIGHT/2+50, 30);
 	private FadeButton backToMenu = new FadeButton("RETURN TO MAIN MENU", WIDTH/2, HEIGHT/2+90, 30);
 	private final int UP=1, RIGHT=2, DOWN=3, LEFT=4;
@@ -32,11 +33,26 @@ public class Play implements GameState
 			Point dimensions = maze.getDimensions();
 			player.configure(startCoords.x, startCoords.y, 50, 50, WIDTH-100, HEIGHT-100, dimensions.x, dimensions.y);
 		}
+		else if (level>=1000000 && level<=1999999)
+		{
+			
+			gameLevel=false;
+			level=level-1000000;
+			String levell = String.format("%06d", level);
+			String path = "mazes/CustomMazes/" + levell + ".maz";
+			System.out.println("AGH FUCK PATH:" + path);
+			maze = new Maze(path,50, 50, WIDTH-100, HEIGHT-100);
+			maze.loadMaze();
+			Point startCoords = maze.getStartCoords();
+			Point dimensions = maze.getDimensions();
+			player.configure(startCoords.x, startCoords.y, 50, 50, WIDTH-100, HEIGHT-100, dimensions.x, dimensions.y);
+		}
 	}
 	public void draw(Graphics2D g2) 
 	{
 		g2.setColor(col.getColor());
 		maze.draw(g2);
+		menu.draw(g2);
 		player.draw(g2);
 		if (winn!=null)
 		{
@@ -62,6 +78,7 @@ public class Play implements GameState
 			over.update();
 			backToMenu.update();
 		}
+		menu.update();
 	}
 
 	public void notifyMouseReleased()
@@ -72,6 +89,10 @@ public class Play implements GameState
 			commun=null;
 		}
 		if (backToMenu.isReleased())
+		{
+			gameState=MENU;
+		}
+		if (menu.isReleased())
 		{
 			gameState=MENU;
 		}

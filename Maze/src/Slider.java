@@ -19,6 +19,7 @@ public class Slider
 	}
 	public int getY()
 	{
+		curY = yHeight/maxyHeight;
 		return curY;
 	}
 

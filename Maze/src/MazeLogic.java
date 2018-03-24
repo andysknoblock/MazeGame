@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
@@ -18,16 +19,10 @@ import javax.swing.Timer;
 public class MazeLogic extends JComponent
 {
 	private static final long serialVersionUID = 1L;
-	/*
-	menu: 0
-	play: 1
-	settings: 2
-	editor: 3
-	*/
 	private final int MENU=0, PLAY=1, LEVELSELECT=2, LEVELLIST=3, LEVELEDITOR=4, WIDTH, HEIGHT, FPS=60;
-	private int gameState=0, maxLevel=1, animation=0, totalLevels=4;
+	private int gameState=0, maxLevel=1, animation=0, totalLevels=5, actualFPS=60, frames=0; //frames and actualFPS are time stuff
 	private String path = "data/levels.dat";
-	private Timer FPStimer;
+	private Timer FPStimer, timer2;
 	GameState[] gameStates = new GameState[5];
 	MazeLogic(int width, int height)
 	{
@@ -61,13 +56,9 @@ public class MazeLogic extends JComponent
 	{
 		GameState menu = new Menu(MENU);
 		gameStates[MENU] = menu;
-		//GameState play = new Play(PLAY, maxLevel);
 		gameStates[PLAY] = null;
-		//GameState levelSelect = new LevelSelect(LEVELSELECT, maxLevel);
 		gameStates[LEVELSELECT] = null;
-		//GameState settings = new Settings(SETTINGS);
 		gameStates[LEVELLIST] = null;
-		//GameState levelEditor = new LevelEditor(LEVELEDITOR);
 		gameStates[LEVELEDITOR] = null;
 	}
 	
@@ -79,10 +70,24 @@ public class MazeLogic extends JComponent
 			{
 				repaint();
 				FPStimer.restart();
+				frames++;
 			}
 		}
 		FPStimer = new Timer(1000/FPS, new TimerListener1());
 		FPStimer.start();
+		//FPS STUFF
+		class TimerListener2 implements ActionListener
+		{
+			public void actionPerformed(ActionEvent e) 
+			{
+				actualFPS = frames;
+				frames=0;
+				timer2.restart();
+			}
+		}
+		timer2 = new Timer(1000, new TimerListener2());
+		timer2.start();
+		//
 	}
 	
 	public void notifyMouseReleased()
@@ -122,6 +127,11 @@ public class MazeLogic extends JComponent
 				animation=-1;
 			}
 		}
+		//FPS stuff
+		g2.setFont(new Font("Purisa", 0, 10));
+		g2.setColor(Color.WHITE);
+		g2.drawString("FPS: " + actualFPS, 10, 15);
+		//
 	}
 	
 	public void update()
@@ -133,7 +143,10 @@ public class MazeLogic extends JComponent
 			commun = gameStates[gameState].getCommunication();
 			if (gameState==PLAY && commun.getGameState()==PLAY)
 			{
-				maxLevel=commun.getCommand();
+				if (commun.getCommand()>maxLevel && commun.getCommand()<20)
+				{
+					maxLevel=commun.getCommand();
+				}
 				if (maxLevel>totalLevels)
 				{
 					maxLevel=totalLevels;
