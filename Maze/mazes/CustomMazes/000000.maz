@@ -1,0 +1,13 @@
+d,t,t,t,t,t,t,t,t,t,a
+l,n,l,n,n,n,n,n,n,n,r
+l,d,t,t,n,l,n,n,n,n,r
+l,t,t,n,n,n,d,t,n,n,r
+l,l,n,n,n,n,n,n,n,t,r
+l,d,n,l,t,n,l,n,n,n,r
+l,d,t,t,l,t,n,n,n,n,r
+d,t,d,t,d,n,t,n,t,n,r
+l,n,t,n,t,t,t,t,t,t,a
+l,n,n,n,n,n,n,n,t,n,r
+h,b,b,b,b,b,b,b,b,b,f
+S(0,0)
+E(10,10)
