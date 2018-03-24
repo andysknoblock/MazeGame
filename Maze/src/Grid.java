@@ -5,25 +5,138 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
 public class Grid extends MouseOverObject
 {
+	private String strang;
 	private int rows, cols;
 	private float xStep, yStep;
-	private boolean save=false, delete=false;
+	private boolean save=false, delete=false, needsUpdate=false;
 	private FadingMessage message = null;
 	private Color greyish = new Color(200,200,200,100);
 	Set<OnScreenComponent> gridData = new HashSet<>();
-	Grid(int x, int y, int width, int height, int rows, int cols)
+	Grid(String strang, int x, int y, int width, int height, int rows, int cols)
 	{
 		super(x,y,width,height);
 		this.rows=rows;
 		this.cols=cols;
 		xStep = (float)(w)/cols;
 		yStep = (float)(h)/rows;
-		
+		if (strang==null)
+		{
+			this.strang=null;
+		}
+		else
+		{
+			this.strang=strang;
+			String path = "mazes/CustomMazes/" + strang + ".maz";
+			loadith(path);
+		}
+	}
+	public void loadith(String path)
+	{
+		Scanner input;
+		try 
+		{
+			input = new Scanner(new File(path));
+			ArrayList<String> dat = new ArrayList<String>();
+			int count=0;
+			String temp = null;
+			Point exit1 = null;
+			Point enter = null;
+			while(input.hasNextLine())
+			{
+				temp = input.nextLine();
+				if (temp.charAt(0)=='S')
+				{
+					String dengue = temp.substring(2, temp.length()-1);
+					String[] dank = dengue.split(",");
+					enter = new Point(Integer.parseInt(dank[0]), Integer.parseInt(dank[1]));
+				}
+				else if (temp.charAt(0)=='E')
+				{
+					String dengue = temp.substring(2, temp.length()-1);
+					String[] dank = dengue.split(",");
+					exit1 = new Point(Integer.parseInt(dank[0]),Integer.parseInt(dank[1]));
+				}
+				else
+				{
+					dat.add(temp);
+					count++;
+				}
+			}
+			if (temp.contains(","))
+			{
+				String temporary[] = dat.get(0).split(",");
+				rows= count;
+				cols = temporary.length;
+			}
+			else
+			{
+				rows=count;
+				cols=1;
+			}
+			updateRowsCols(rows, cols);
+			needsUpdate=true;
+			OnScreenComponent temporary = new StartComponent(toX(enter.x), toY(enter.y),(int)xStep , (int)yStep, enter.x, enter.y);
+			if (!isInData(temporary) && !temporary.limitCoordinates(temporary.getCol(), temporary.getRow()))
+			{
+				gridData.add(temporary);
+			}
+			temporary = new EndComponent(toX(exit1.x), toY(exit1.y),(int)xStep , (int)yStep, exit1.x, exit1.y);
+			if (!isInData(temporary) && !temporary.limitCoordinates(temporary.getCol(), temporary.getRow()))
+			{
+				gridData.add(temporary);
+			}
+
+			for (int a=0;a<dat.size();a++)
+			{
+				
+				temp = dat.get(a);
+				String[] tempo;
+				if (temp.contains(","))
+				{
+					tempo = temp.split(",");
+				}
+				else
+				{
+					tempo = new String[1];
+					tempo[0] = temp;
+				}
+				for (int b=0; b< tempo.length; b++)
+				{
+					if (tempo[b]!="1")
+					{
+						Block blockBoi = new Block(tempo[b].charAt(0), b, a, 0, 0,0, 0);
+						if (blockBoi.getLeft())
+						{
+							temporary = new LeftAlignedLine(toX(b), toY(a),(int)xStep , (int)yStep, b, a);
+							if (!isInData(temporary) && !temporary.limitCoordinates(temporary.getCol(), temporary.getRow()))
+							{
+								gridData.add(temporary);
+							}
+						}
+						if (blockBoi.getTop())
+						{
+							temporary = new TopAlignedLine(toX(b), toY(a),(int)xStep , (int)yStep, b, a);
+							if (!isInData(temporary) && !temporary.limitCoordinates(temporary.getCol(), temporary.getRow()))
+							{
+								gridData.add(temporary);
+							}
+						}
+					}
+				}
+			}
+			input.close();
+		}
+		catch (FileNotFoundException e) 
+		{
+			System.out.println(e);
+		}
 	}
 	public void draw (Graphics2D g2)
 	{
@@ -138,8 +251,18 @@ public class Grid extends MouseOverObject
 		{
 			File folder = new File("mazes/CustomMazes/");
 			File fileList[] = folder.listFiles(); 
-			String jeep  = String.format("%06d", fileList.length);
-			String path = "mazes/CustomMazes/" + jeep + ".maz";
+			String path = null;
+			if (strang==null)
+			{
+				String jeep  = String.format("%06d", fileList.length);
+				path = "mazes/CustomMazes/" + jeep + ".maz";
+				strang=jeep;
+			}
+			else
+			{
+				path = "mazes/CustomMazes/" + strang + ".maz";
+			}
+			
 			PrintWriter pr = new PrintWriter(new File(path));
 			for (int i=0; i<toFile.length; i++)
 			{
@@ -182,8 +305,26 @@ public class Grid extends MouseOverObject
 			return null;
 		}
 	}
-	public void updateRowsCols(int r, int c)
+	public Point updateRowsCols(int r, int c)
 	{
+		if (needsUpdate)
+		{
+			needsUpdate = false;
+			xStep = (float)(w)/cols;
+			yStep = (float)(h)/rows;
+			Set<OnScreenComponent> tempData = new HashSet<>();
+			for (OnScreenComponent grd : gridData)
+			{
+				if (grd.getRow()<cols && grd.getCol()<rows)
+				{
+					OnScreenComponent temp = IDList.getByID(grd.getID(), toX(grd.getRow()), toY(grd.getCol()), (int) xStep, (int) yStep, grd.getRow(), grd.getCol());
+					tempData.add(temp);
+				}
+			}
+			gridData.clear();
+			gridData=tempData;
+			return new Point(rows, cols);
+		}
 		if (rows!=r || cols!=c)
 		{
 			rows=r;
@@ -202,6 +343,8 @@ public class Grid extends MouseOverObject
 			gridData.clear();
 			gridData=tempData;
 		}
+		return null;
+		
 	}
 	public int toX(int colX)
 	{
@@ -219,7 +362,7 @@ public class Grid extends MouseOverObject
 		if (temp!=null)
 		{
 			if (!isInData(temp) && !temp.limitCoordinates(temp.getCol(), temp.getRow()))
-				{
+			{
 				gridData.add(temp);
 			}
 		}

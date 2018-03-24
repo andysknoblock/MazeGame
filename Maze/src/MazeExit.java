@@ -1,17 +1,20 @@
+
 import java.awt.Graphics2D;
 import java.awt.Point;
 
 public class MazeExit 
 {
-	private int x,y,w,h, row, col;
+	private int row, col;
+	private SquareBoi[] square = new SquareBoi[5];
 	public void setEnd(int x, int y, int w, int h, int col, int row)
 	{
-		this.x=x;
-		this.y=y;
-		this.w=w;
-		this.h=h;
+		
 		this.col=col;
 		this.row=row;
+		for (int i=0; i<square.length; i++)
+		{
+			square[i] = new SquareBoi(x, y, w, h, 200/(square.length)*i);
+		}
 	}
 	public Point getCoords()
 	{
@@ -19,7 +22,10 @@ public class MazeExit
 	}
 	public void draw(Graphics2D g2)
 	{
-		g2.drawRect(x+w/4, y+h/4, w/2, h/2);
+		for (int i=0; i<square.length; i++)
+		{
+			square[i].draw(g2);
+		}
 	}
 
 }

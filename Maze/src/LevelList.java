@@ -90,7 +90,8 @@ public class LevelList implements GameState
 				}
 				else
 				{
-					
+					gameState = LEVELEDITOR;
+					commun = new Communication(LEVELEDITOR, Integer.parseInt(mazes[i].getID()));
 				}
 			}
 		}

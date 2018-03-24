@@ -1,9 +1,11 @@
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 public class Block 
 {
 	protected char sides;
-	protected int x,  y,  w,  h, row, col;
+	protected int x,  y,  w,  h, row, col, yeet=5;
+	protected float fill;
 	protected boolean top=false, bottom=false, left=false, right=false;
 	Block(char sides, int row, int col , int x, int y, int w, int h)
 	{
@@ -120,6 +122,15 @@ public class Block
 	o: all sides*/
 	public void draw(Graphics2D g2)
 	{
+		if (yeet<50)
+		{
+			yeet++;
+			fill = (float)(255*5/yeet);
+		}
+		else
+		{
+			yeet=5;
+		}
 		if (bottom)
 			drawBottom(g2);
 		if (top)
@@ -132,18 +143,38 @@ public class Block
 	protected void drawBottom(Graphics2D g2)
 	{
 		g2.drawLine(x, y+h, x+w, y+h);
+		Color c = g2.getColor();
+		g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(fill)));
+		g2.drawLine(x, y+h-yeet/5, x+w-1, y+h-yeet/5);
+		g2.drawLine(x, y+h-yeet/5, x+w-1, y+h-yeet/5);
+		g2.setColor(c);
 	}
 	protected void drawTop(Graphics2D g2)
 	{
 		g2.drawLine(x, y, x+w, y);
+		Color c = g2.getColor();
+		g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(fill)));
+		g2.drawLine(x, y+yeet/5, x+w-1, y+yeet/5);
+		g2.drawLine(x, y-yeet/5, x+w-1, y-yeet/5);
+		g2.setColor(c);
 	}
 	protected void drawLeft(Graphics2D g2)
 	{
 		g2.drawLine(x, y, x, y+h);
+		Color c = g2.getColor();
+		g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(fill)));
+		g2.drawLine(x-yeet/5, y, x-yeet/5, y+h-1);
+		g2.drawLine(x+yeet/5, y, x+yeet/5, y+h-1);
+		g2.setColor(c);
 	}
 	protected void drawRight(Graphics2D g2)
 	{
 		g2.drawLine(x+w, y, x+w, y+h);
+		Color c = g2.getColor();
+		g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), (int)(fill)));
+		g2.drawLine(x+w-yeet/5, y, x+w-yeet/5, y+h-1);
+		g2.drawLine(x+w+yeet/5, y, x+w+yeet/5, y+h-1);
+		g2.setColor(c);
 	}
 	private void setBottom()
 	{

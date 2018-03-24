@@ -10,17 +10,26 @@ public class LevelEditor implements GameState
 	private Color col = new Color(255,255,255,100);
 	private GridSelector selector = new GridSelector(0, HEIGHT-70, WIDTH, 40);
 	private GridComponent selected = null;
-	private Grid grid = new Grid(50, 50, WIDTH-150, HEIGHT-150, rows, cols);
+	private Grid grid;
 	private Button save = new Button("Save", WIDTH-35, 30, 15);
 	private Button menu = new Button("Return To Menu", 60, 30, 15);
 	private Button edit = new Button("Edit", WIDTH-35, 60, 15);
 	private Button delete = new Button("Delete", WIDTH-35, 80, 15);
 	private PressTriangle mode = new PressTriangle(false, WIDTH-75, 64, 8);
-	LevelEditor (int gameState)
+	LevelEditor (int gameState, int strang)
 	{
 		this.gameState=gameState;
 		nums[0] = new NumberSelector(rows, "Rows: ", 200, 30);
 		nums[1] = new NumberSelector(cols, "Cols: ", 320, 30);
+		if (strang==-1)
+		{
+			 grid = new Grid(null, 50, 50, WIDTH-150, HEIGHT-150, rows, cols);
+		}
+		else
+		{
+			String temp = String.format("%06d", strang);
+			grid = new Grid(temp, 50, 50, WIDTH-150, HEIGHT-150, rows, cols);
+		}
 	}
 	public void draw(Graphics2D g2) 
 	{
@@ -40,10 +49,17 @@ public class LevelEditor implements GameState
 
 	public void update() 
 	{
+		Point p = grid.updateRowsCols(rows, cols);
+		if (p!=null)
+		{
+			rows = p.x;
+			cols = p.y;
+			nums[0].updateVal(rows);
+			nums[1].updateVal(cols);
+		}
 		rows=nums[0].update();
 		cols=nums[1].update();
 		save.update();
-		grid.updateRowsCols(rows, cols);
 		selector.update();
 		selected=selector.getSelected();
 		menu.update();

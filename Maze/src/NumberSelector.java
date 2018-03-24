@@ -51,5 +51,9 @@ public class NumberSelector
 		disp = new LeftAlignedText((str + val), x+offset, y, 15);
 		configured=false;
 	}
+	public void updateVal(int val)
+	{
+		this.val=val;
+	}
 
 }

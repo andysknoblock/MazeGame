@@ -6,7 +6,7 @@ public class LevelSelect implements GameState
 	private int gameState, level=0, maxLevel;
 	
 	private boolean hasCommunication=false;
-	private NumberButton[] buttons = new NumberButton[20];
+	private NumberButton[] buttons = new NumberButton[16];
 	private PulsingColor col = new PulsingColor(100,254,100,200);
 	private Button menu = new Button("Return To Menu", WIDTH/2-10, 20, 25);
 	private Communication command = null;

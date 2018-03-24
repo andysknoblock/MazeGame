@@ -20,7 +20,7 @@ public class MazeLogic extends JComponent
 {
 	private static final long serialVersionUID = 1L;
 	private final int MENU=0, PLAY=1, LEVELSELECT=2, LEVELLIST=3, LEVELEDITOR=4, WIDTH, HEIGHT, FPS=60;
-	private int gameState=0, maxLevel=1, animation=0, totalLevels=5, actualFPS=60, frames=0; //frames and actualFPS are time stuff
+	private int gameState=0, maxLevel=1, animation=0, totalLevels=16, actualFPS=60, frames=0; //frames and actualFPS are time stuff
 	private String path = "data/levels.dat";
 	private Timer FPStimer, timer2;
 	GameState[] gameStates = new GameState[5];
@@ -170,6 +170,14 @@ public class MazeLogic extends JComponent
 
 				}
 			}
+			else if (commun!=null && gameState == LEVELEDITOR)
+			{
+				if (gameState==commun.getGameState())
+				{
+
+					(gameStates[gameState]) = new LevelEditor(LEVELEDITOR, commun.getCommand());
+				}
+			}
 			else
 			{
 				if (gameState == MENU)
@@ -190,7 +198,7 @@ public class MazeLogic extends JComponent
 				}
 				else if (gameState == LEVELEDITOR)
 				{
-					gameStates[gameState] = new LevelEditor(LEVELEDITOR);
+					gameStates[gameState] = new LevelEditor(LEVELEDITOR, -1);
 				}
 				else
 				{

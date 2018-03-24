@@ -67,6 +67,7 @@ public class Play implements GameState
 	}
 	public void update() 
 	{
+		player.update();
 		col.update();
 		if(maze.checkWin(player.getCoords()) && !win)
 		{
